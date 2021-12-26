@@ -30,20 +30,19 @@ def read_file(_files_path):
             _points.append(_point)
             _point = []
             _cluster_id.append(int(float(line[2])))
-        # 如果对单个文件执行画图，则line34-line40取消注释，并注释掉lin42-line46
-        # _k = len(_cluster_id)  # 簇的数目
-        # _k_cluster = defaultdict(list)
-        #
-        # for i in range(len(_points)):
-        #     _k_cluster[_cluster_id[i]].append(_points[i])
-        #
-        # draw_graph(_k_cluster=_k_cluster, _points=_points, _f_name=f_name)
+        # 如果还需要对单个文件执行画图，则line34-line40取消注释，并注释掉lin42-line46
+        _k = len(_cluster_id)  # 簇的数目
+        _k_cluster = defaultdict(list)
 
-    _k = len(_cluster_id)  # 簇的数目
-    _k_cluster = defaultdict(list)
+        for i in range(len(_points)):
+            _k_cluster[_cluster_id[i]].append(_points[i])
 
-    for i in range(len(_points)):
-        _k_cluster[_cluster_id[i]].append(_points[i])
+        draw_graph(_k_cluster=_k_cluster, _points=_points, _f_name=f_name)
+
+    # _k = len(_cluster_id)  # 簇的数目
+    # _k_cluster = defaultdict(list)
+    # for i in range(len(_points)):
+    #     _k_cluster[_cluster_id[i]].append(_points[i])
 
     # print(_k_cluster)
     # print(len(_k_cluster))
@@ -61,7 +60,7 @@ def random_color():
     return '#' + color
 
 
-def draw_graph(_k_cluster, _points, _f_name='part-m-00000'):
+def draw_graph(_k_cluster, _points, _f_name='final'):
     """
     将不同簇用不同颜色着色
     :param _k_cluster: 簇及对应的点
@@ -78,12 +77,13 @@ def draw_graph(_k_cluster, _points, _f_name='part-m-00000'):
     for cluster_id, pts in _k_cluster.items():
         _x = [_p[0] for _p in pts]
         _y = [_p[1] for _p in pts]
-
         ax.scatter(x=_x, y=_y, c=color[int(cluster_id)], label='cluster_'+str(cluster_id))
 
     ax.xaxis.set_major_locator(ticker.MultipleLocator(base=300))
     ax.yaxis.set_major_locator(ticker.MultipleLocator(base=100))
-    ax.set_title('K=5, iteration=1000')
+    ax.set_title('K=5, iteration=1000: ' + str(_f_name))
+
+    ax.legend()
     plt.savefig('visualization-'+str(_f_name)+'.jpg')
     plt.show()
 
